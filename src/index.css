@@ -1,0 +1,37 @@
+:root {
+  font-family: 'Poppins', sans-serif;
+  background-color: #0a0a0a; /* Quase preto absoluto */
+  color: rgba(255, 255, 255, 0.9);
+  overflow-x: hidden; /* Evita que a tela 'dance' pros lados no celular */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Esconde a barra de rolagem lateral mas permite rolar (Estética Mobile Clean) */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Classes utilitárias para os slides horizontais */
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem;
+  scroll-behavior: smooth;
+  /* Esconde scrollbar no container tbm */
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
+}
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.glow-text {
+  text-shadow: 0 0 20px rgba(248, 113, 113, 0.6);
+}
