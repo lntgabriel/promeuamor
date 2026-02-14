@@ -160,8 +160,6 @@ const Hero = ({ onFinish }) => {
     return () => clearTimeout(timer);
   }, [index, currentSlide]);
 
-  // A tela final foi removida daqui para o Home.jsx
-
   // --- O FILME RODANDO ---
   return (
     <div style={{

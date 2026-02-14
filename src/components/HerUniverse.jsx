@@ -31,7 +31,7 @@ const items = [
     type: "Amor", 
     icon: <Heart />, // Usando o ícone do Lucide
     image: "/pets/fred-cama.jpg", // Foto do Fred pra começar
-    desc: "a gente sabe que a casa não é a mesma sem eles"
+    desc: "a gente sabe que a casa não é a mesma sem eles tao coitadinhos"
   },
   { 
     id: 4, name: "Brawl Stars", subtitle: "vc é a melhor jogadora de todas aqui",
@@ -45,7 +45,7 @@ const items = [
     type: "Anime", 
     icon: <Tv/>,
     image: "/icons/tokyo.png",
-    desc: "vc combina demais com a vibe da Toman. Você ia botar ordem la meu amor"
+    desc: "vc ia bater em todo mundo la meu amor"
   },
   { 
     id: 6, name: "Roblox", subtitle: "viciotrauma",
