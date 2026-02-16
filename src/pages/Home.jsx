@@ -11,6 +11,9 @@ import PhotoGallery from '../components/PhotoGallery';
 import GameZone from '../components/GameZone';
 import BottomNav from '../components/BottomNav'; 
 import Pets from '../components/Pets'; 
+import Heir from '../components/VirtualSon';
+
+
 
 const Home = () => {
   // Novo estado para controlar a tela de abertura
@@ -34,6 +37,8 @@ const Home = () => {
       case 'gallery': return <><PhotoGallery /><Pets /></>;
       case 'game': return <GameZone />;
       default: return <HerUniverse />;
+      case 'streak': return <Heir />;
+
     }
   };
 

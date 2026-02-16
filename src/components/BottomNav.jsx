@@ -1,12 +1,13 @@
-import { Heart, Gamepad2, Image, Sparkles } from 'lucide-react'; // Troquei Home por Sparkles
+import { Heart, Gamepad2, Image, Sparkles, Flame, Baby } from 'lucide-react'; // Troquei Home por Sparkles
 
 const BottomNav = ({ activeTab, setActiveTab }) => {
   // Tirei o 'home' e comecei com 'universe'
   const tabs = [
     { id: 'universe', icon: <Sparkles size={24} />, label: "Universo" },
     { id: 'gallery', icon: <Image size={24} />, label: "Fotos" },
+    { id: 'streak', icon: <Baby size={24} />, label: "Herdeiro" },
     { id: 'game', icon: <Gamepad2 size={24} />, label: "Jogos" },
-  ];
+];
 
   return (
     <div style={{
