@@ -37,8 +37,7 @@ const Home = () => {
       case 'gallery': return <><PhotoGallery /><Pets /></>;
       case 'game': return <GameZone />;
       default: return <HerUniverse />;
-      case 'streak': return <Heir />;
-
+      case 'streak': return <Heir onClose={() => setActiveTab('universe')} />;
     }
   };
 

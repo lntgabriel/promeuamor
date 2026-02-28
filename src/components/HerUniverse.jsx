@@ -1,77 +1,94 @@
-// src/components/HerUniverse.jsx (VERSÃO FINAL COM TEXTOS PERSONALIZADOS)
-
-import { useState } from 'react';
+// src/components/HerUniverse.jsx
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Sparkles, Heart, Crown, Music, Tv, Gamepad2 } from 'lucide-react';
+import { X, Sparkles, Heart, Crown, Music, Tv, Gamepad2, Star } from 'lucide-react';
 
-// Destaques Amarelos (A cor favorita dela!)
 const themeColor = "#FACC15"; 
 
 // ========================================================
-// ITENS DO "UNIVERSO" DELA - AGORA COM A NOSSA CARA
+// DADOS (Mantive os seus, só ajustei para o novo visual)
 // ========================================================
 const items = [
   { 
-    id: 1, name: "The Weeknd", subtitle: "often é a sua cara",
-    type: "Música", 
-    icon: <Music/>,
+    id: 1, name: "The Weeknd", subtitle: "o dono da sua playlist",
+    type: "Música", icon: <Music size={18}/>,
     spotifyId: "4PhsKqMdgMEUSstTDAmMpg", 
-    image: "/icons/theweeknd.png", 
-    desc: "não tem como ouvir e não lembrar de você, igualzinho a você. Essa música é o puro suco do que a gente conversa né? KAKAKAKAKAKA"
+    image: "/icons/theweeknd.png", // Tenha certeza que essa img existe!
+    desc: "Não tem como ouvir e não lembrar de você. Essa música é o puro suco do que a gente conversa né? KAKAKAKAKAKA."
   },
   { 
-    id: 2, name: "Weak Hero Class 1", subtitle: "sua série favoritaaaaaaaaaa",
-    type: "Série", 
-    icon: <Tv/>,
+    id: 2, name: "Weak Hero Class", subtitle: "sua obsessão",
+    type: "Série", icon: <Tv size={18}/>,
     image: "/icons/weakhero.png",
-    desc: "é sua série favoritaaaaaaaaaa, e eu não imaginava q vc ia me fazer gostar de séries coreanas KAKAKKAKAK."
+    desc: "É sua série favoritaaaaaaaaaa, e eu não imaginava q vc ia me fazer gostar de séries coreanas KAKAKKAKAK."
   },
   { 
     id: 3, name: "Nossa Família", subtitle: "Nossos filhos",
-    type: "Amor", 
-    icon: <Heart />, // Usando o ícone do Lucide
-    image: "/pets/fred-cama.jpg", // Foto do Fred pra começar
-    desc: "a gente sabe que a casa não é a mesma sem eles tao coitadinhos"
+    type: "Amor", icon: <Heart size={18}/>,
+    image: "/pets/fred-cama.jpeg", 
+    desc: "a gente tem tantos e tantos filhos, e olha q vamos ter muito mais, nao da pra por todo mundo na mesma foto mas pelo menos coloquei o fred e o bred que importam muito pra nós"
   },
   { 
-    id: 4, name: "Brawl Stars", subtitle: "vc é a melhor jogadora de todas aqui",
-    type: "Game", 
-    icon: <Gamepad2/>,
+    id: 4, name: "Brawl Stars", subtitle: "melhor jogadora",
+    type: "Game", icon: <Gamepad2 size={18}/>,
     image: "/icons/brawlstars.png", 
-    desc: "vc fica impressionada e com raiva ao mesmo tempo KAKAKAKAKA. Você joga muito, me carrega sempre. Mas o melhor de tudo é ser o melhor casal de todosodstosodsodo"
+    desc: "Vc fica impressionada e com raiva ao mesmo tempo KAKAKAKAKA. Você joga muito, me carrega sempre. Mas o melhor de tudo é ser o melhor casal do planeta."
   },
   { 
-    id: 5, name: "Tokyo Revengers", subtitle: "chifuyu vccvcvcvcvcvcvc",
-    type: "Anime", 
-    icon: <Tv/>,
+    id: 5, name: "Tokyo Revengers", subtitle: "chifuyu lover",
+    type: "Anime", icon: <Tv size={18}/>,
     image: "/icons/tokyo.png",
-    desc: "vc ia bater em todo mundo la meu amor"
+    desc: "Vc ia bater em todo mundo lá meu amor."
   },
   { 
-    id: 6, name: "Roblox", subtitle: "viciotrauma",
-    type: "Game",
-    icon: <Gamepad2/>,
+    id: 6, name: "Roblox", subtitle: "vício da madrugada",
+    type: "Game", icon: <Gamepad2 size={18}/>,
     image: "/icons/roblox.png",
-    desc: "nossos jogos de madrugada não seriam a mesma coisa sem a gente estressados por causa dele, ou vc sendo banida por uma foto da igreja KAKAKAKAKAKA"
+    desc: "Nossos jogos de madrugada não seriam a mesma coisa sem a gente estressados ou vc sendo banida por uma foto da igreja KAKAKAKAKAKA."
   },
   { 
-    id: 7, name: "Coraline", subtitle: "vcieueueuaueauu",
-    type: "Filme", 
-    icon: <Tv/>,
+    id: 7, name: "Coraline", subtitle: "o outro mundo",
+    type: "Filme", icon: <Tv size={18}/>,
     image: "/icons/coraline.png",
-    desc: "."
+    desc: "Você ama esse filme e eu amo vc"
   }
 ];
 
-
-// Adicionei os jogos de vocês e outras coisas que ela gosta!
 const satellites = [
-  { name: "Minecraft", emoji: "⛏️" },
-  { name: "Genshin", emoji: "✨" },
+  { name: "Minecraft", emoji: "⛏️" }, { name: "Genshin", emoji: "✨" },
   { name: "Pintar", emoji: "🎨" }, { name: "Tom & Jerry", emoji: "🐭" },
-  { name: "Garfield", emoji: "🐱" }, { name: "Música", emoji: "🎵" }, { name: "TikTok", emoji: "📱" },
+  { name: "Garfield", emoji: "🐱" }, { name: "TikTok", emoji: "📱" },
+  { name: "Açaí", emoji: "💜" }, { name: "Dormir", emoji: "💤" }
 ];
 
+// Componente de Partículas de Fundo (Estrelas)
+const StarBackground = () => {
+    // Cria 20 estrelas em posições aleatórias
+    const stars = Array.from({ length: 20 }).map((_, i) => ({
+        id: i,
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        size: Math.random() * 3 + 1,
+        duration: Math.random() * 3 + 2
+    }));
+
+    return (
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+            {stars.map(s => (
+                <motion.div
+                    key={s.id}
+                    animate={{ opacity: [0.2, 1, 0.2] }}
+                    transition={{ duration: s.duration, repeat: Infinity, ease: "easeInOut" }}
+                    style={{
+                        position: 'absolute', top: s.top, left: s.left,
+                        width: s.size, height: s.size, borderRadius: '50%',
+                        background: '#fff', boxShadow: `0 0 ${s.size * 2}px ${themeColor}`
+                    }}
+                />
+            ))}
+        </div>
+    )
+}
 
 const HerUniverse = () => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -81,7 +98,6 @@ const HerUniverse = () => {
     const clientX = e.clientX || e.touches?.[0]?.clientX;
     const clientY = e.clientY || e.touches?.[0]?.clientY;
     if (!clientX) return;
-
     const newHeart = { id: Date.now(), x: clientX, y: clientY };
     setHearts(prev => [...prev, newHeart]);
     setTimeout(() => setHearts(prev => prev.filter(h => h.id !== newHeart.id)), 1000);
@@ -89,124 +105,175 @@ const HerUniverse = () => {
 
   return (
     <div style={{ 
-      backgroundColor: '#0a0a0a', padding: '6rem 0 8rem 0', minHeight: '100vh', 
-      position: 'relative', overflow: 'hidden', 
-      background: 'radial-gradient(circle at top, #282800 0%, #000000 100%)' 
+      backgroundColor: '#050505', minHeight: '100vh', 
+      position: 'relative', paddingBottom: '120px',
+      background: 'radial-gradient(circle at 50% 0%, #1a1a00 0%, #000000 100%)' 
     }}>
       
-      <AnimatePresence>
-        {hearts.map(h => (
-            <motion.div
-                key={h.id}
-                initial={{ opacity: 1, y: h.y, x: h.x, scale: 0 }}
-                animate={{ opacity: 0, y: h.y - 150, x: h.x + (Math.random()*40-20), scale: 2 }}
-                exit={{ opacity: 0 }}
-                style={{ position: 'fixed', pointerEvents: 'none', zIndex: 9999, top: 0, left: 0, color: themeColor }}
-            >
-                <Heart fill={themeColor} size={20} />
-            </motion.div>
-        ))}
-      </AnimatePresence>
+      <StarBackground />
 
+      {/* TÍTULO FLUTUANTE */}
       <motion.div 
-        initial={{ opacity: 0, y: -20 }} whileInView={{ opacity: 1, y: 0 }}
-        style={{ textAlign: 'center', marginBottom: '3rem', padding: '0 20px' }}
+        initial={{ opacity: 0, y: -30 }} whileInView={{ opacity: 1, y: 0 }}
+        style={{ textAlign: 'center', paddingTop: '4rem', paddingBottom: '2rem', position: 'relative', zIndex: 10 }}
       >
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', border: `1px solid ${themeColor}`, borderRadius: '20px', padding: '6px 16px', marginBottom: '10px', background: `${themeColor}10` }}>
-             <Crown size={16} color={themeColor} fill={themeColor}/> 
-             <span style={{ fontSize: '0.8rem', color: themeColor, textTransform: 'uppercase', fontWeight: 'bold' }}>Coisas de você</span>
+        <div style={{ 
+            display: 'inline-flex', alignItems: 'center', gap: '8px', 
+            border: `1px solid ${themeColor}30`, borderRadius: '50px', 
+            padding: '8px 20px', marginBottom: '15px', 
+            background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(5px)',
+            boxShadow: `0 0 15px ${themeColor}20`
+        }}>
+             <Crown size={14} color={themeColor} fill={themeColor}/> 
+             <span style={{ fontSize: '0.75rem', color: '#fff', letterSpacing: '1px', textTransform: 'uppercase', fontWeight: 'bold' }}>O Mundo Dela</span>
         </div>
-        <h2 style={{ fontFamily: "'Lobster', cursive", fontSize: '3.5rem', color: '#fff', margin: 0, textShadow: `0 0 20px ${themeColor}50` }}>
+        <h2 style={{ 
+            fontFamily: "'Lobster', cursive", fontSize: '4rem', color: '#fff', margin: 0, 
+            textShadow: `0 0 30px ${themeColor}40, 0 0 10px ${themeColor}` 
+        }}>
             Seu Universo
         </h2>
+        <p style={{ color: '#888', fontSize: '0.9rem', marginTop: '5px' }}>Tudo que faz você ser <b>você</b> ✨</p>
       </motion.div>
 
-      <div style={{ padding: '0 20px', maxWidth: '600px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        {items.map((item) => (
+      {/* GRID MASONRY / GALERIA */}
+      <div style={{ 
+          padding: '0 20px', maxWidth: '800px', margin: '0 auto', 
+          display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' // 2 colunas no celular
+      }}>
+        {items.map((item, index) => (
             <motion.div
                key={item.id}
                layoutId={`card-${item.id}`}
-               whileTap={{ scale: 0.98 }}
-               whileHover={{ y: -5 }}
+               whileTap={{ scale: 0.95 }}
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               transition={{ delay: index * 0.1 }}
                onClick={(e) => { setSelectedItem(item); spawnHearts(e); }}
-               initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }}
                style={{
                    position: 'relative', cursor: 'pointer',
-                   background: 'rgba(255, 255, 255, 0.03)',
-                   backdropFilter: 'blur(10px)',
-                   borderRadius: '24px', padding: '1rem',
-                   border: `1px solid ${themeColor}40`,
-                   display: 'flex', alignItems: 'center', gap: '1rem',
-                   boxShadow: `0 8px 30px rgba(0,0,0,0.4), 0 0 10px ${themeColor}15`
+                   height: index % 3 === 0 ? '240px' : '180px', // Alturas variadas para ficar dinâmico
+                   borderRadius: '24px', overflow: 'hidden',
+                   border: `1px solid ${themeColor}20`,
+                   background: '#111',
+                   gridColumn: index === 0 ? 'span 2' : 'span 1' // O primeiro item ocupa a largura toda (Destaque)
                }}
             >
-                <div style={{ 
-                    width: '70px', height: '70px', borderRadius: '18px', background: '#000',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                    overflow: 'hidden', padding: item.icon ? '0px' : '5px', border: '1px solid #333'
-                }}>
-                   {item.icon ? <div style={{color: themeColor}}>{item.icon}</div> : <img src={item.iconImg || item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
-                </div>
+                {/* Imagem de Fundo com Zoom suave */}
+                <motion.img 
+                    src={item.image} 
+                    alt={item.name}
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.5 }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7 }} 
+                />
                 
-                <div style={{ flex: 1, minWidth: 0 }}>
-                    <h3 style={{ margin: 0, fontSize: '1.2rem', fontFamily: "'Poppins', sans-serif", fontWeight: '700', color: '#fff' }}>
+                {/* Degradê para o texto aparecer */}
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #000 0%, transparent 80%)' }} />
+
+                {/* Conteúdo do Card */}
+                <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', padding: '15px' }}>
+                    <div style={{ 
+                        display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4,
+                        color: themeColor, fontSize: '0.7rem', textTransform: 'uppercase', fontWeight: 'bold' 
+                    }}>
+                        {item.icon} {item.type}
+                    </div>
+                    <h3 style={{ margin: 0, fontSize: '1.2rem', fontFamily: "'Poppins', sans-serif", fontWeight: '700', color: '#fff', lineHeight: 1.1 }}>
                         {item.name}
                     </h3>
-                    <p style={{ margin: '4px 0 0 0', fontSize: '0.8rem', color: '#ccc', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.subtitle}</p>
                 </div>
-                <div style={{ color: themeColor }}><Sparkles size={18}/></div>
+
+                {/* Brilho no canto */}
+                <div style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: 6 }}>
+                    <Sparkles size={14} color={themeColor} />
+                </div>
             </motion.div>
         ))}
       </div>
 
-      <div style={{ marginTop: '4rem', padding: '0 20px', maxWidth: '600px', margin: '4rem auto 0 auto' }}>
-          <h3 style={{textAlign: 'center', color: '#888', marginBottom: '1.5rem', fontFamily: "'Poppins', sans-serif", fontWeight: '400'}}>E muito mais...</h3>
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px' }}>
+      {/* SATÉLITES (TAGS) */}
+      <div style={{ marginTop: '3rem', padding: '0 20px', maxWidth: '600px', margin: '3rem auto 0 auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: '1.5rem', opacity: 0.6 }}>
+            <div style={{height: 1, width: 30, background: '#fff'}}></div>
+            <span style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '2px' }}>Outras Paixões</span>
+            <div style={{height: 1, width: 30, background: '#fff'}}></div>
+          </div>
+          
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px' }}>
               {satellites.map((s, i) => (
                   <motion.div
-                    key={i} onClick={(e) => spawnHearts(e)} whileTap={{ scale: 0.9 }}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    viewport={{ once: true }}
+                    key={i} onClick={(e) => spawnHearts(e)} whileHover={{ scale: 1.1, rotate: Math.random() * 10 - 5 }} whileTap={{ scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.05, type: 'spring' }}
                     style={{
-                        padding: '8px 12px', background: '#111', borderRadius: '16px', border: '1px solid #333',
+                        padding: '8px 16px', background: 'rgba(255,255,255,0.05)', 
+                        borderRadius: '20px', border: '1px solid #333',
                         display: 'flex', alignItems: 'center', gap: '8px',
-                        cursor: 'pointer'
+                        cursor: 'pointer', backdropFilter: 'blur(4px)'
                     }}
                   >
-                      <span style={{ fontSize: '1.2rem' }}>{s.emoji}</span>
-                      <span style={{ fontSize: '0.8rem', color: '#aaa' }}>{s.name}</span>
+                      <span>{s.emoji}</span>
+                      <span style={{ fontSize: '0.85rem', color: '#ddd', fontWeight: '500' }}>{s.name}</span>
                   </motion.div>
               ))}
           </div>
       </div>
 
+      {/* EFEITO DE CORAÇÃOZINHO AO CLICAR */}
+      <AnimatePresence>
+        {hearts.map(h => (
+            <motion.div
+                key={h.id}
+                initial={{ opacity: 1, y: h.y, x: h.x, scale: 0 }}
+                animate={{ opacity: 0, y: h.y - 100, x: h.x + (Math.random()*40-20), scale: 2, rotate: Math.random()*90-45 }}
+                exit={{ opacity: 0 }}
+                style={{ position: 'fixed', pointerEvents: 'none', zIndex: 9999, top: 0, left: 0, color: themeColor }}
+            >
+                <Heart fill={themeColor} size={24} />
+            </motion.div>
+        ))}
+      </AnimatePresence>
+
+      {/* MODAL DE DETALHES */}
       <AnimatePresence>
         {selectedItem && (
           <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedItem(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.9)', zIndex: 9998, backdropFilter: 'blur(5px)' }} />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedItem(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 9998, backdropFilter: 'blur(8px)' }} />
             <motion.div
               layoutId={`card-${selectedItem.id}`}
-              initial={{ y: '100%' }} animate={{ y: '0%' }} exit={{ y: '100%' }} transition={{type: 'spring', damping: 25, stiffness: 180}}
               style={{
-                position: 'fixed', bottom: 0, left: 0, right: 0, height: '90vh',
-                background: '#121212', borderTopLeftRadius: '30px', borderTopRightRadius: '30px',
-                zIndex: 9999, overflowY: 'auto', borderTop: `2px solid ${themeColor}`,
-                boxShadow: `0 -10px 50px ${themeColor}30`, maxWidth: '600px', margin: '0 auto'
+                position: 'fixed', top: '5%', bottom: '5%', left: '5%', right: '5%',
+                background: '#121212', borderRadius: '32px', overflow: 'hidden',
+                zIndex: 9999, border: `1px solid ${themeColor}30`,
+                boxShadow: `0 0 50px ${themeColor}20`, maxWidth: '500px', margin: '0 auto',
+                display: 'flex', flexDirection: 'column'
               }}
             >
-                <div style={{ width: '100%', height: '40vh', position: 'relative' }}>
-                    <img src={selectedItem.image} style={{ width: '100%', height: '100%', objectFit: 'cover', borderTopLeftRadius: '28px', borderTopRightRadius: '28px' }} />
-                    <button onClick={() => setSelectedItem(null)} style={{ position: 'absolute', top: 20, right: 20, background: 'rgba(0,0,0,0.6)', borderRadius: '50%', padding: '10px', border: 'none', color: 'white', cursor: 'pointer' }}><X /></button>
-                    <div style={{ position: 'absolute', bottom: 0, width: '100%', height: '100px', background: 'linear-gradient(to top, #121212, transparent)' }} />
+                {/* Imagem Grande no Topo */}
+                <div style={{ flex: 1, position: 'relative', minHeight: '40%' }}>
+                    <img src={selectedItem.image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <button onClick={() => setSelectedItem(null)} style={{ position: 'absolute', top: 20, right: 20, background: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '8px', border: 'none', color: 'white', cursor: 'pointer', backdropFilter: 'blur(4px)' }}><X /></button>
+                    <div style={{ position: 'absolute', bottom: 0, width: '100%', height: '150px', background: 'linear-gradient(to top, #121212 10%, transparent)' }} />
+                    
+                    <div style={{ position: 'absolute', bottom: 20, left: 20 }}>
+                        <div style={{ display: 'inline-flex', gap: 6, background: themeColor, color: '#000', padding: '4px 10px', borderRadius: 10, fontSize: '0.7rem', fontWeight: 'bold', marginBottom: 8 }}>
+                           {selectedItem.icon} {selectedItem.type}
+                        </div>
+                        <h2 style={{ fontFamily: "'Lobster', cursive", fontSize: '2.5rem', margin: 0, lineHeight: 1, color: '#fff', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>{selectedItem.name}</h2>
+                    </div>
                 </div>
-                <div style={{ padding: '0 30px 50px 30px', position: 'relative', top: '-50px' }}>
-                    <h2 style={{ fontFamily: "'Lobster', cursive", fontSize: '3rem', margin: 0, lineHeight: 1, color: themeColor, textShadow: `0 0 10px ${themeColor}50` }}>{selectedItem.name}</h2>
-                    <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: '1rem', color: '#ccc', lineHeight: '1.7', marginTop: '20px' }}>{selectedItem.desc}</p>
+
+                {/* Texto e Conteúdo */}
+                <div style={{ padding: '25px', background: '#121212', flexShrink: 0 }}>
+                    <p style={{ fontFamily: "'Poppins', sans-serif", fontSize: '0.95rem', color: '#ccc', lineHeight: '1.6', margin: 0 }}>
+                        {selectedItem.desc}
+                    </p>
+                    
                     {selectedItem.spotifyId && (
-                        <div style={{ marginTop: '30px', border: `1px solid ${themeColor}40`, padding: '5px', borderRadius: '12px', background: '#000' }}>
-                             <iframe style={{ borderRadius: '8px' }} src={`https://open.spotify.com/embed/track/${selectedItem.spotifyId}?utm_source=generator&theme=0`} width="100%" height="152" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                        <div style={{ marginTop: '25px', paddingTop: '20px', borderTop: '1px solid #333' }}>
+                             <iframe style={{ borderRadius: '12px' }} src={`https://open.spotify.com/embed/track/${selectedItem.spotifyId}?utm_source=generator&theme=0`} width="100%" height="80" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                         </div>
                     )}
                 </div>
